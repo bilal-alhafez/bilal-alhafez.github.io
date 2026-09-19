@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin — Bilal Studio</title>
+<style>
+:root{--bg:#0a0a0a;--card:#141414;--line:rgba(255,255,255,.08);--accent:#ff6b35}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font-family:Inter,system-ui,sans-serif;padding:20px}
+.wrap{max-width:1100px;margin:0 auto}input,select,textarea{width:100%;background:#141414;border:1px solid var(--line);color:#fff;padding:10px 12px;border-radius:10px;margin-top:6px}
+label{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.6);display:block;margin-top:14px}
+.btn{border:1px solid var(--line);background:#181818;padding:10px 14px;border-radius:10px;color:#fff;cursor:pointer;font-size:13px}
+.btn.primary{background:var(--accent);color:#000;border-color:var(--accent);font-weight:600}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--card);display:flex;gap:10px;align-items:center}
+.card img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+.list{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Control Panel — Bilal Studio</h1>
+<p style="color:rgba(255,255,255,.6)">No-code editor. Add media, reorder by drag, export content.json for GitHub.</p>
+<div id="gate"><label>Password (1234 or bilal2024)</label><input id="pw" type="password"><button class="btn primary" id="login" style="margin-top:10px">Unlock</button></div>
+<div id="app" style="display:none">
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:18px 0">
+<button class="btn primary" id="exportBtn">Export content.json</button>
+<label class="btn"><input type="file" id="importFile" accept=".json" hidden>Import JSON</label>
+<button class="btn" id="clearLs">Clear Local</button>
+</div>
+<div class="grid">
+<div>
+<h3>Add / Edit Item</h3>
+<label>Title</label><input id="f_title">
+<label>Client</label><select id="f_client"><option>Ocean Pearl</option><option>Kshr AlSindian</option><option>Chahine</option><option>NoroSystem</option><option>Other</option></select>
+<label>Category</label><select id="f_category"><option value="factories">Factories (Kshr)</option><option value="tech">Tech (Noro)</option><option value="shipping">Shipping (Ocean Pearl)</option><option value="fb">F&B (Chahine)</option><option value="bookmarks">Bookmarks</option></select>
+<label>Type</label><select id="f_type"><option value="image">Image</option><option value="video">Video</option><option value="before-after-image">Before-After Image</option><option value="before-after-video">Before-After Video</option></select>
+<label>Description</label><textarea id="f_desc" rows="3"></textarea>
+<label>Thumbnail URL</label><input id="f_thumb"><input type="file" id="f_thumb_file" accept="image/*">
+<label>Media URL (image/video)</label><input id="f_media"><input type="file" id="f_media_file" accept="image/*,video/*">
+<label>Before Media URL</label><input id="f_before"><input type="file" id="f_before_file" accept="image/*,video/*">
+<label>After Media URL</label><input id="f_after"><input type="file" id="f_after_file" accept="image/*,video/*">
+<label><input type="checkbox" id="f_feat"> Featured</label>
+<div style="margin-top:14px;display:flex;gap:8px"><button class="btn primary" id="saveBtn">Save Item</button><button class="btn" id="cancelBtn">Cancel</button></div>
+<div style="margin-top:20px;border:1px dashed rgba(255,255,255,.15);border-radius:12px;padding:14px">
+<h4 style="margin:0">How to deploy to GitHub Pages</h4>
+<ol style="color:rgba(255,255,255,.7);line-height:1.6;font-size:13px">
+<li>Create repo e.g. bilal-studio on GitHub</li>
+<li>Upload index.html, admin.html, content.json, /assets folder if you have local media</li>
+<li>Repo Settings → Pages → Source: main branch / root</li>
+<li>For media: upload files to /assets and use relative path like assets/video.mp4 or paste external URL</li>
+<li>Use this admin.html locally or via Pages: edit, then Export content.json and replace file in repo</li>
+<li>Commit → site updates in ~1 min</li>
+</ol>
+<p style="font-size:12px;color:rgba(255,255,255,.5)">Tip: For videos, keep under 15MB for fast Pages load. Use muted loop mp4. For DataURL uploads, they work but increase JSON size — prefer /assets path for production.</p>
+</div>
+</div>
+<div><h3>Items (drag to reorder)</h3><div class="list" id="list"></div></div>
+</div>
+</div>
+</div>
+<script>
+let ITEMS = JSON.parse(localStorage.getItem('bilal_content_v1')||'[]');
+if(!ITEMS.length){ fetch('content.json').then(r=>r.json()).then(j=>{ ITEMS=j; render(); }).catch(()=>{}); }
+const PASS='bilal2024'; // change here — also accepts 1234
+document.getElementById('login').onclick=()=>{
+  const v=document.getElementById('pw').value;
+  if(v==='1234'||v.toLowerCase()===PASS){ document.getElementById('gate').style.display='none'; document.getElementById('app').style.display='block'; render(); }
+  else alert('Wrong password');
+};
+let editId=null, dragId=null;
+function fileToDataUrl(file, cb){ const r=new FileReader(); r.onload=()=>cb(r.result); r.readAsDataURL(file); }
+['thumb','media','before','after'].forEach(k=>{
+  document.getElementById('f_'+k+'_file').addEventListener('change',e=>{
+    const f=e.target.files[0]; if(!f) return; fileToDataUrl(f, url=>{ document.getElementById('f_'+k).value=url; });
+  });
+});
+document.getElementById('saveBtn').onclick=()=>{
+  const obj={
+    id: editId||Date.now().toString(),
+    title: document.getElementById('f_title').value||'Untitled',
+    client: document.getElementById('f_client').value,
+    category: document.getElementById('f_category').value,
+    type: document.getElementById('f_type').value,
+    description: document.getElementById('f_desc').value,
+    thumbnail: document.getElementById('f_thumb').value,
+    media: document.getElementById('f_media').value,
+    beforeMedia: document.getElementById('f_before').value,
+    afterMedia: document.getElementById('f_after').value,
+    featured: document.getElementById('f_feat').checked,
+    date: new Date().toISOString().slice(0,10)
+  };
+  if(!obj.title||!obj.thumbnail){ alert('Title + thumbnail required'); return; }
+  if(editId){ ITEMS=ITEMS.map(i=>i.id===editId?obj:i); } else ITEMS.unshift(obj);
+  save(); clearForm(); render();
+};
+function clearForm(){ editId=null; ['title','thumb','media','before','after','desc'].forEach(k=>{ const el=document.getElementById('f_'+k); if(el) el.value=''; }); document.getElementById('f_feat').checked=false; }
+document.getElementById('cancelBtn').onclick=clearForm;
+function save(){ localStorage.setItem('bilal_content_v1', JSON.stringify(ITEMS)); }
+function render(){
+  const list=document.getElementById('list'); if(!list) return; list.innerHTML='';
+  ITEMS.forEach(it=>{
+    const div=document.createElement('div'); div.className='card'; div.draggable=true;
+    div.innerHTML=`<img src="${it.thumbnail}"><div style="flex:1"><div style="font-size:13px;font-weight:500">${it.title}</div><div style="font-size:11px;color:rgba(255,255,255,.5)">${it.client} • ${it.category} • ${it.type}</div></div><button class="btn" data-act="edit">Edit</button><button class="btn" data-act="dup">Dup</button><button class="btn" data-act="del">✕</button>`;
+    div.addEventListener('dragstart',()=>dragId=it.id);
+    div.addEventListener('dragover',e=>{e.preventDefault();});
+    div.addEventListener('drop',e=>{
+      e.preventDefault();
+      if(!dragId||dragId===it.id) return;
+      const from=ITEMS.findIndex(x=>x.id===dragId), to=ITEMS.findIndex(x=>x.id===it.id);
+      const [m]=ITEMS.splice(from,1); ITEMS.splice(to,0,m); save(); render();
+    });
+    div.querySelector('[data-act="edit"]').onclick=()=>{ editId=it.id; document.getElementById('f_title').value=it.title; document.getElementById('f_client').value=it.client; document.getElementById('f_category').value=it.category; document.getElementById('f_type').value=it.type; document.getElementById('f_desc').value=it.description; document.getElementById('f_thumb').value=it.thumbnail; document.getElementById('f_media').value=it.media; document.getElementById('f_before').value=it.beforeMedia; document.getElementById('f_after').value=it.afterMedia; document.getElementById('f_feat').checked=it.featured; window.scrollTo({top:0,behavior:'smooth'}); };
+    div.querySelector('[data-act="dup"]').onclick=()=>{ const dup={...it,id:Date.now().toString(),title:it.title+' (copy)'}; ITEMS.unshift(dup); save(); render(); };
+    div.querySelector('[data-act="del"]').onclick=()=>{ if(confirm('Delete?')){ ITEMS=ITEMS.filter(x=>x.id!==it.id); save(); render(); } };
+    list.appendChild(div);
+  });
+}
+document.getElementById('exportBtn').onclick=()=>{
+  const blob=new Blob([JSON.stringify(ITEMS,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='content.json'; a.click(); URL.revokeObjectURL(url);
+};
+document.getElementById('importFile').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ try{ const j=JSON.parse(r.result); if(Array.isArray(j)){ ITEMS=j; save(); render(); alert('Imported '+j.length); } }catch{ alert('Invalid JSON'); } }; r.readAsText(f);
+});
+document.getElementById('clearLs').onclick=()=>{ if(confirm('Clear localStorage?')){ localStorage.removeItem('bilal_content_v1'); ITEMS=[]; render(); } };
+</script>
+</body></html>
