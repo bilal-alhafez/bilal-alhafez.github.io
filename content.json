@@ -1,31 +1,45 @@
 [
   {
+    "id": "1789802949017",
+    "title": "Test",
+    "client": "Kshr AlSindian",
+    "category": "factories",
+    "type": "before-after-image",
+    "description": "",
+    "thumbnail": "/assets/2026-09_قشر-السنديان-SM2.jpg",
+    "media": "/assets/2026-09_قشر-السنديان-SM2.jpg",
+    "beforeMedia": "",
+    "afterMedia": "",
+    "featured": false,
+    "date": "2026-09-19"
+  },
+  {
     "id": "1",
-    "title": "Kshr Production Line — Grade & Polish",
+    "title": "Chair Showcase",
     "client": "Kshr AlSindian",
     "category": "factories",
     "type": "before-after-image",
     "description": "Raw factory footage transformed into cinematic industrial narrative. Color, stabilization, speed ramping.",
-    "thumbnail": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='1000' viewBox='0 0 800 1000'%3E%3Crect width='800' height='1000' fill='1a1a1a'/%3E%3Ctext x='50%25' y='48%25' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff33' font-family='Inter,sans-serif' font-size='18' font-weight='600' letter-spacing='0.08em'%3EKSHR%20FACTORY%3C/text%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff22' font-family='Inter,sans-serif' font-size='11' letter-spacing='0.2em'%3EBILAL STUDIO%3C/text%3E%3C/svg%3E",
-    "media": "",
-    "beforeMedia": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800' viewBox='0 0 1200 800'%3E%3Crect width='1200' height='800' fill='222222'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff55' font-family='Inter,sans-serif' font-size='22' font-weight='600'%3EBEFORE%20%E2%80%94%20LOG%3C/text%3E%3C/svg%3E",
-    "afterMedia": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800' viewBox='0 0 1200 800'%3E%3Crect width='1200' height='800' fill='2a2a2a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff55' font-family='Inter,sans-serif' font-size='22' font-weight='600'%3EAFTER%20%E2%80%94%20GRADED%3C/text%3E%3C/svg%3E",
+    "thumbnail": "/assets/2026-09_قشر-السنديان-SM2.jpg",
+    "media": "/assets/2026-09_قشر-السنديان-SM2.jpg",
+    "beforeMedia": "/assets/2026-08_Ocean-Pearl-SM2",
+    "afterMedia": "/assets/2026-09_قشر-السنديان-SM2.jpg",
     "featured": true,
-    "date": "2024-11-02"
+    "date": "2026-09-19"
   },
   {
     "id": "2",
     "title": "NoroSystem Dashboard Launch",
     "client": "NoroSystem",
     "category": "tech",
-    "type": "video",
+    "type": "image",
     "description": "Motion system for SaaS launch — UI capture + 3D device mockups, 24fps export.",
-    "thumbnail": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='1000' viewBox='0 0 800 1000'%3E%3Crect width='800' height='1000' fill='171717'/%3E%3Ctext x='50%25' y='48%25' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff33' font-family='Inter,sans-serif' font-size='18' font-weight='600' letter-spacing='0.08em'%3ENORO%20SYSTEM%3C/text%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff22' font-family='Inter,sans-serif' font-size='11' letter-spacing='0.2em'%3EBILAL STUDIO%3C/text%3E%3C/svg%3E",
-    "media": "",
+    "thumbnail": "/assets/2026-07_Noro-System-SM 5.jpg",
+    "media": "/assets/2026-07_Noro-System-SM 5.jpg",
     "beforeMedia": "",
     "afterMedia": "",
-    "featured": true,
-    "date": "2024-10-15"
+    "featured": false,
+    "date": "2026-09-19"
   },
   {
     "id": "3",
