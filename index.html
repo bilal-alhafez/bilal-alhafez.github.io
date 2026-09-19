@@ -73,7 +73,26 @@ footer{padding:36px 0;border-top:1px solid var(--line);color:var(--muted);font-s
     })
     .catch(error => console.error('Error loading JSON:', error));
 </script>
-  
+
+<script>
+     // 1. Fetch the external JSON file
+     fetch('content.json')
+         .then(response => response.json())
+         .then(data => {
+             // 2. Insert simple text content into HTML elements
+             document.getElementById('page-title').textContent = data.title;
+             document.getElementById('page-description').textContent = data.description;
+
+             // 3. Loop through an array of items if you have a list
+             const listContainer = document.getElementById('features-list');
+             data.features.forEach(feature => {
+                 const paragraph = document.createElement('p');
+                 paragraph.textContent = `🔹 ${feature}`;
+                 listContainer.appendChild(paragraph);
+             });
+         })
+         .catch(error => console.error('Error loading text content:', error));
+</script>
 <script>
 const ITEMS = [
   {
